@@ -36,7 +36,9 @@ class mainmap(QtWidgets.QMainWindow):
         self.setWindowTitle("Ground control")
 
         # Start the HTTP server in a separate process
-        http_server = subprocess.Popen(["python", "-m", "http.server"])
+        
+        http_server = subprocess.Popen(["python", "-m", "http.server", "8080"])
+        
        
         #port initialization
         # ports = serial.tools.list_ports.comports()
@@ -71,7 +73,7 @@ class mainmap(QtWidgets.QMainWindow):
 
         # Load the desired website
         self.mapview = QWebEngineView()
-        self.mapview.load(QUrl("http://127.0.0.1:8000/mapv3.html"))
+        self.mapview.load(QUrl("http://127.0.0.1:8080/mapv3.html"))
         self.layout.addWidget(self.mapview)
         # layoutcompass.addWidget(self.uicompass)
     
@@ -155,6 +157,7 @@ class mainmap(QtWidgets.QMainWindow):
         
         
     def slidechange(self):
+        
         self.value = self.ui.slideleft.value()
         self.ui.ovl4.setText(str(self.value))
     

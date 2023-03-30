@@ -35,7 +35,8 @@
             .then(response => response.json())
             .then(data => {
                 globalangle = data.angle;
-                globallongitude = data.temperature;
+                globallongitude = data.longitude;
+                globallatitude = data.latitude;
                 console.log(globallongitude);
                 console.log(globalangle);
                
@@ -43,44 +44,44 @@
 
             // set up map
            
-            var coordinates = [[27.670183,85.312614],
+            // var coordinates = [[27.670183,85.312614],
                                 
-                                [ 27.6705 , 85.3536 ],
+            //                     [ 27.6705 , 85.3536 ],
                                
-                                [ 27.6706 , 85.3653 ],
+            //                     [ 27.6706 , 85.3653 ],
                             
-                                [ 27.6706 , 85.3771 ],
+            //                     [ 27.6706 , 85.3771 ],
                              
-                                [ 27.6707 , 85.3888 ],
+            //                     [ 27.6707 , 85.3888 ],
                                 
-                                [ 27.6708 , 85.4005 ],
+            //                     [ 27.6708 , 85.4005 ],
 
-                                [27.6710 , 85.4298]];
+            //                     [27.6710 , 85.4298]];
             
-            // console.log(center);
-            var index = 0;
+            // // console.log(center);
+          
             
             
                        
 
            //set interval to change center value every 5 seconds
-            // setInterval(function() {
-            //             center = coordinates[index];
-            //             index = (index + 1) % coordinates.length;
+            setInterval(function() {
+                        center = [globallatitude , globallongitude];
+                       
                         
-            //             var icon = L.icon({
-            //             iconUrl: 'rocket.png',
-            //             iconSize: [70, 70] })
+                        var icon = L.icon({
+                        iconUrl: 'rocket.png',
+                        iconSize: [70, 70] })
                     
                         
-            //             marker = L.marker(center, { icon: icon }).addTo(map); //rocket
-            //             console.log(center);
+                        marker = L.marker(center, { icon: icon }).addTo(map); //rocket
+                        console.log(center);
 
                        
                         
 
                   
-            //         }, 2000);
+                    }, 5000);
 
             var center = [27.670183,85.312614]
 
@@ -125,7 +126,8 @@
             L.circle(center,{radius : 1500,color : 'red'}).addTo(map);
      
             markerQ = L.marker([27.6710,85.4298]).addTo(map); //last positioning
-        
+           
+            
 
             // Add polar craticule
             var rings = [];

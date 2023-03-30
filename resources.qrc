@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>icon/U+25BC.svg.png</file>
+    <file>icon/align-center.png</file>
+    <file>icon/ruler.png</file>
+  </qresource>
+</RCC>

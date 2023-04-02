@@ -16,6 +16,8 @@ from PyQt5.QtCore import QUrl
 import serial.tools.list_ports
 import time
 import subprocess
+from PyQt5.QtWebEngineWidgets import QWebEngineProfile
+
 
 
 
@@ -37,7 +39,8 @@ class mainmap(QtWidgets.QMainWindow):
 
         # Start the HTTP server in a separate process
         
-        http_server = subprocess.Popen(["python", "-m", "http.server", "8080"])
+        self.http_server = subprocess.Popen(["python", "-m", "http.server", "8080"])
+        
         
        
         #port initialization
@@ -72,7 +75,11 @@ class mainmap(QtWidgets.QMainWindow):
         #coordinate = (latitude[17], longitude[17])   
 
         # Load the desired website
-        self.mapview = QWebEngineView()
+        self.mapview = QWebEngineView(self)
+        self.mapview.setGeometry(0, 0, 800, 600)
+        profile = QWebEngineProfile.defaultProfile()
+        profile.setHttpCacheType(QWebEngineProfile.NoCache)
+
         self.mapview.load(QUrl("http://127.0.0.1:8080/mapv3.html"))
         self.layout.addWidget(self.mapview)
         # layoutcompass.addWidget(self.uicompass)
@@ -93,6 +100,8 @@ class mainmap(QtWidgets.QMainWindow):
         self.ui.slideleft.valueChanged.connect(self.slidechange)
         # self.ui.slideleft.valueChanged.connect(self.noshowmap)
         # self.ui.slideleft.valueChanged.connect(self.showmap)
+
+       
         
         self.ui.slideleft.setMaximum(50000)
         self.value = 0
@@ -117,13 +126,34 @@ class mainmap(QtWidgets.QMainWindow):
 
     
         #creating timer
-        self.timer = QTimer()
+        self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
-        self.timer.start(2000)
+        self.timer.setInterval(2000)
+        #creating timer 2
+        self.timer2 = QTimer(self)
+        self.timer2.setInterval(9000)
+        self.timer2.timeout.connect(self.update2)
+
+        self.timer.start()
+        self.timer2.start()
 
    
-      
- 
+  
+    
+    
+
+    def update2(self):
+        # Use JavaScript to refresh the content of the page
+        script = """
+            var container = document.getElementById('map');
+            var content = container.innerHTML;
+            container.innerHTML = content;
+        """
+        self.mapview.page().runJavaScript(script, Qt.QueuedConnection)
+        self.mapview.reload()
+
+
+
     def update(self):
         
 
@@ -146,6 +176,8 @@ class mainmap(QtWidgets.QMainWindow):
         # data = packet.decode("utf").rstrip('\n')
         # self.ui.d3_value.setText(str(data))
     
+    def refresh_page(self):
+        self.mapview.reload()
 
     def portinitiate(self):
         
@@ -198,6 +230,8 @@ class mainmap(QtWidgets.QMainWindow):
     
         
     def close_window(self):
+        self.http_server.terminate()
+
         self.close()
       
 

@@ -17,6 +17,8 @@ import serial.tools.list_ports
 import time
 import subprocess
 from PyQt5.QtWebEngineWidgets import QWebEngineProfile
+import json
+
 
 
 
@@ -37,9 +39,7 @@ class mainmap(QtWidgets.QMainWindow):
         
         self.setWindowTitle("Ground control")
 
-        # Start the HTTP server in a separate process
-        
-        self.http_server = subprocess.Popen(["python", "-m", "http.server", "8080"])
+      
         
         
        
@@ -78,6 +78,10 @@ class mainmap(QtWidgets.QMainWindow):
         self.mapview = QWebEngineView(self)
         self.mapview.setGeometry(0, 0, 800, 600)
         profile = QWebEngineProfile.defaultProfile()
+          # Start the HTTP server in a separate process
+        
+        self.http_server = subprocess.Popen(["python", "-m", "http.server", "8080"])
+        
         profile.setHttpCacheType(QWebEngineProfile.NoCache)
 
         self.mapview.load(QUrl("http://127.0.0.1:8080/mapv3.html"))
@@ -133,14 +137,17 @@ class mainmap(QtWidgets.QMainWindow):
         self.timer2 = QTimer(self)
         self.timer2.setInterval(9000)
         self.timer2.timeout.connect(self.update2)
-
+        self.ui.start.clicked.connect(self.update_angle)
         self.timer.start()
         self.timer2.start()
+
+        
 
    
   
     
-    
+  
+
 
     def update2(self):
         # Use JavaScript to refresh the content of the page
@@ -175,6 +182,22 @@ class mainmap(QtWidgets.QMainWindow):
         
         # data = packet.decode("utf").rstrip('\n')
         # self.ui.d3_value.setText(str(data))
+
+
+  
+
+    def update_angle(angle):
+        # Load the JSON file
+        with open('jsontest.json', 'r') as f:
+            json_data = json.load(f)
+
+        # Update the angle value in the JSON data
+        json_data['angle'] = 90
+
+        # Write the updated JSON data back to the file
+        with open('jsontest.json', 'w') as f:
+            json.dump(json_data, f)
+
     
     def refresh_page(self):
         self.mapview.reload()

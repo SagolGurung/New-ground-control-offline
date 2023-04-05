@@ -12,6 +12,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt5.QtWidgets import QVBoxLayout
 from new import Ui_Main_UI #importing class from python file
 from PyQt5.QtCore import QUrl
+import subprocess
+from PyQt5.QtWebEngineWidgets import QWebEngineProfile
+import json
 
 
 
@@ -30,9 +33,12 @@ class mainw(QtWidgets.QMainWindow):
         self.webview = QWebEngineView()
 
         # Load the desired website
-        self.webview.load(QUrl("http://127.0.0.1:5500/orientedshape.html"))
+        profile = QWebEngineProfile.defaultProfile()
+        self.http_server = subprocess.Popen(["python", "-m", "http.server", "8000"])
+        self.webview.load(QUrl("http://127.0.0.1:8000/orientedshape.html"))
         layout.addWidget(self.webview)
-       
+        profile.setHttpCacheType(QWebEngineProfile.NoCache)
+
 
         self.ui.close_button.clicked.connect(self.close_window)
 

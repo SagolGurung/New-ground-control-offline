@@ -96,11 +96,24 @@
       };
       createLights();
       // Animate the scene
+
+
+      // let globalorientationX;
+          
+      // fetch('jsontest.json')
+      //       .then(response => response.json())
+      //       .then(data => {
+      //           globalorientationX = data.orientationX;
+                
+               
+      //       });
+
+
       function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
         cube.rotation.y += 0.04
-        cube.rotation.x = 90
+        cube.rotation.x += 90
      
        
         

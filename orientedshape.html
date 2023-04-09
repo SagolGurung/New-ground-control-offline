@@ -107,21 +107,43 @@
                 
                
       //       });
+      let globalorientationX;
+      let globalorientationY;
+      let globalorientationZ;
+      
 
+      setInterval(function(){
+        
+        fetch('jsontest.json')
+              .then(response => response.json())
+              .then(data => {
+                  globalorientationX = data.orientationX;
+                  globalorientationY = data.orientationY;
+                  globalorientationZ = data.orientationZ;
+                  animate();
+                
+                 
+              });
+              },1000);
+     
+          
 
       function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-        cube.rotation.y += 0.04
-        cube.rotation.x += 90
+            
+       
+          requestAnimationFrame(animate);
+          renderer.render(scene, camera);
+          cube.rotation.y = globalorientationX
+          cube.rotation.x = globalorientationY
+          cube.rotation.z = globalorientationZ
      
        
         
         
       }
 
-      // Call the animate function
-      animate();
+
+     
     </script>
   </body>
 </html>
